@@ -1,0 +1,69 @@
+This is a preposition representation system introduced in the paper "Embedding Syntax and Semantics of Prepositions via Tensor Decomposition". This system trains preposition embedding via tensor decomposition, and applies it to two downstream applications: preposition selection and preposition attachment disambiguation.
+
+
+Requirements:
+1. Python 2.7
+2. NLTK
+3. sklearn
+
+
+Structure:
+1. tensor_prep_embed/: generates a cooccurrence tensor from a large corpus, and trains preposition embedding via tensor decomposition;
+   (1) tensor_generation: generate tensor of cooccurrences of word triplets;
+   (2) weighted_decomposition: weighted decomposition of generated tensor;
+2. prep_selection/: uses embeddings for the task of preposition selection;
+3. prep_attachment/: uses embeddings for the task of preposition attachment disambiguation.
+
+Data preparation:
+1. Put English training corpus (we use English Wikipedia en_wiki.txt) in data/;
+2. For preposition selection task, put the dataset cikm2014/ to the folder data/;
+3. For preposition attachment disambiguation task, put the dataset ??? to the folder data/;
+
+
+Running instructions:
+
+Go to folder tensor_prep_embed/tensor_generation/
+1. Save vocab and word indices
+python tensor_generation.py --fn your_corpus_name --prepNum your_preposition_number
+* fn: English corpus for embedding training, we use English Wikipedia.
+* prepNum: the number of prepositions, it is 49 in preposition selection task and is 76 in preposition attachment disambiguation.
+
+2. Generate tensors of triplet cooccurrences with respect to each preposition in .sav format
+python tensor_generation.py --fn your_corpus_name --isCount --prepNum your_preposition_number
+
+3. Transform a tensor to .txt format
+python merge_tensor_util.py --prepNum your_number_of_prepositions
+Note that the number of prepositions can be 49 or 76 corresponding to data/prepositions_49.txt and data/prepositions_76.txt respectively.
+
+4. Decompose a tensor
+   (1) ALS
+   use Orthogonalized ALS (http://web.stanford.edu/~vsharan/orth-als.html) to decompose vectors, and put mode*.mat and mode*.map in the folder model/weighted_tensor_vectors/.
+   (2) Weighted tensor decomposition
+    Go to folder tensor_prep_embed/weighted_decomposition
+      a) specify the path of cooccurrence file in run_cooccur.sh
+      ./run_read_tensor.sh
+      b) specify the path of shuffled cooccurrence file and save the word vectors to the folder model/ALS_tensor_vectors/,
+      ./run_decompose.sh
+
+5. Preposition selection
+python conf_mat.py
+
+If you use ALS based vectors, run
+python binary_detection.py --test your_test_file_name --embedding your_embedding_path --isALS
+python prep_selection.py --test your_test_file_name --embedding your_embedding_path --isALS
+If you use weighted tensor decompositoon, run
+python binary_detection.py --test your_test_file_name --embedding your_embedding_path
+python prep_selection.py --test your_test_file_name --embedding your_embedding_path 
+
+* test file name can be CoNLL dataset (CoNLL.txt) or stackexchange dataset (stackexchange.txt).
+* embedding can be the folder of ALS embeddings (../model/ALS_tensor_vectors/) or the path of weighted decomposed embeddings (../model/weighted_tensor_vectors/weighted_tensor_vectors_49.txt)
+
+
+
+6. Preposition attachment disambiguation
+We are working on refactoring code for the task of preposition attachment disambiguation.
+
+
+
+
+
