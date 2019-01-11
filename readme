@@ -1,4 +1,5 @@
-This is a preposition representation system introduced in the paper "Embedding Syntax and Semantics of Prepositions via Tensor Decomposition". This system trains preposition embedding via tensor decomposition, and applies it to two downstream applications: preposition selection and preposition attachment disambiguation.
+This is a preposition representation system introduced in the paper "Embedding Syntax and Semantics of Prepositions via Tensor Decomposition". 
+This system trains preposition embedding via tensor decomposition, and applies it to two downstream applications: preposition selection and preposition attachment disambiguation.
 
 
 Requirements:
@@ -58,10 +59,23 @@ python prep_selection.py --test your_test_file_name --embedding your_embedding_p
 * test file name can be CoNLL dataset (CoNLL.txt) or stackexchange dataset (stackexchange.txt).
 * embedding can be the folder of ALS embeddings (../model/ALS_tensor_vectors/) or the path of weighted decomposed embeddings (../model/weighted_tensor_vectors/weighted_tensor_vectors_49.txt)
 
-
-
 6. Preposition attachment disambiguation
 We are working on refactoring code for the task of preposition attachment disambiguation.
+
+
+If you use our code, please cite our work:
+Gong, H., Bhat, S., & Viswanath, P. (2018). Embedding Syntax and Semantics of Prepositions via Tensor Decomposition. 
+In Proceedings of the 2018 Conference of the North American Chapter of the Association for Computational Linguistics: 
+Human Language Technologies, Volume 1 (Long Papers) (Vol. 1, pp. 896-906).
+
+@inproceedings{gong2018embedding,
+  title={Embedding Syntax and Semantics of Prepositions via Tensor Decomposition},
+  author={Gong, Hongyu and Bhat, Suma and Viswanath, Pramod},
+  booktitle={Proceedings of the 2018 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long Papers)},
+  volume={1},
+  pages={896--906},
+  year={2018}
+}
 
 
 
